@@ -3,40 +3,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using static CardGames.Functions;
+
 namespace CardGames
 {
-    using static Library;
     public class Card
     {
-        public string Rank;
+        public int Rank;
         public string Suit;
         public string Name;
-        public int Value;
 
-        public Card(string rank, string suit) 
+        public Card(int rank, string suit) 
         { 
-            Rank = StringToTitle(rank);
-            Suit = StringToTitle(suit);
-            Name = $"{Rank} of {Suit}";
-            Value = DetermineValue();
+            Rank = rank;
+            Suit = suit;
+            Name = GetName();
         }
 
-        private int DetermineValue()
+        private string GetName()
         {
-            switch (Rank)
+            return Rank switch
             {
-                case "Ace":
-                    return 1;
-                case "Jester":
-                    return 11;
-                case "Queen":
-                    return 12;
-                case "King":
-                    return 13;
-            }
-            if ((int.TryParse(Rank, out int value)) && (value >= 1) && (value <= 13)) return value;
+                1 => $"Ace of {Suit}",
+                11 => $"Jack of {Suit}",
+                12 => $"Queen of {Suit}",
+                13 => $"King of {Suit}",
+                _ => $"{Rank} of {Suit}",
+            };
+        }
 
-            throw new Exception("The Rank of a Card must be \"Ace\", \"Jester\", \"Queen\", \"King\", or a string of 1-13");
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

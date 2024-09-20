@@ -1,38 +1,46 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
   <Class Name="CardGames.Game">
-    <Position X="5.75" Y="0.5" Width="2.75" />
+    <Position X="6.5" Y="1.75" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAIAAAAgAAAAAAAAAA=</HashCode>
       <FileName>Game.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CardGames.Card">
-    <Position X="8.75" Y="0.5" Width="2.25" />
+    <Position X="9.5" Y="4.25" Width="4.25" />
     <TypeIdentifier>
-      <HashCode>AAABAABAAAAAAAAAAAAAAAQAAAAAAAAAAAAgAAAAAAQ=</HashCode>
+      <HashCode>AAABAABAAAAAAAAEAAAAAAQAAAAAAAAAAAAAAAAABAA=</HashCode>
       <FileName>Card.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CardGames.Deck">
-    <Position X="11.25" Y="0.5" Width="3.25" />
+    <Position X="9.5" Y="0.5" Width="4.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQIAAAAAAAAAAAIAAAAEAA=</HashCode>
+      <HashCode>AAACAAAAAIAAAAAEAAAAAAQIAAAEBAAAAQAIAAAAEEA=</HashCode>
       <FileName>Deck.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="CardGames.Library">
-    <Position X="2.25" Y="0.5" Width="3.25" />
+  <Class Name="CardGames.Functions">
+    <Position X="0.5" Y="0.5" Width="5.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAIAAAAAQAAAACAAAEAAAAAAAAAAAAAAEAAA=</HashCode>
-      <FileName>Library.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAARgAAAAABAEAAAAABAAAAAAAAEAAE=</HashCode>
+      <FileName>Functions.cs</FileName>
+      <NewMemberFileName>Library.cs</NewMemberFileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CardGames.Program">
-    <Position X="0.5" Y="0.5" Width="1.5" />
+    <Position X="6.5" Y="0.5" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
       <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CardGames.Printer">
+    <Position X="0.5" Y="4" Width="5.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAABQAAAABAAAAAAAAAAABAAQAAAAUEAAA=</HashCode>
+      <FileName>Printer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

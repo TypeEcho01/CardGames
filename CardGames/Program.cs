@@ -1,11 +1,14 @@
 ﻿namespace CardGames
 {
-    using static Library;
+    using static CardGames.Functions;
     internal class Program
     {
         static void Main()
         {
-            Print("10 + 10 =", 10 + 10);
+            Deck CardDeck = new();
+            Card MyCard = CardDeck.Deal();
+            ConfigurePrint(sep: "\n");
+            Print(MyCard, CardDeck);
         }
     }
 }
