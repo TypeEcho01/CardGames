@@ -5,10 +5,9 @@
     {
         static void Main()
         {
-            Deck CardDeck = new();
-            Card MyCard = CardDeck.Deal();
-            ConfigurePrint(sep: "\n");
-            Print(MyCard, CardDeck);
+            Print(null, 3, 8.2435325, 77.532f, true, "Hello, world!", 'J', new Printer());
+            Print();
+            Print(null, null, null);
         }
     }
 }
