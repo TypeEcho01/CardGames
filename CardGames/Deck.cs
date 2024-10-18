@@ -4,46 +4,27 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters;
 using System.Text;
 
-using static CardGames.Functions;
+using static Library.Methods;
 
 namespace CardGames
 {
     public class Deck
     {
-        private static int numberOfDecks = 0;
-
         public string Name;
         public string[] Suits;
         public int SuitSize;
         public int DeckSize;
         public List<Card> Cards;
 
-        public Deck(string? name = null, string[]? suits = null, int suitSize = 13)
+        public Deck(string name, string[] suits, int suitSize = 13)
         {
-            if (suitSize <= 0)
-                throw new ArgumentException("Deck() suitSize must be greater than 0");
-
-
-            if (suits == null) // Default suits
-                Suits = ["Spades", "Clubs", "Diamonds", "Hearts"];
-            else
-            {
-                Suits = suits;
-                if (Suits.Length == 0)
-                    throw new ArgumentException("Deck() suits must contain at least one string");
-            }
-
+            Name = name;
+            Suits = suits;
             SuitSize = suitSize;
+
             DeckSize = SuitSize * Suits.Length;
-
             Cards = BuildDeck();
-            //Shuffle();
-            numberOfDecks++;
-
-            if (name != null)
-                Name = name;
-            else
-                Name = $"Deck {numberOfDecks}";
+            Shuffle();
         }
 
         private List<Card> BuildDeck()
@@ -59,20 +40,15 @@ namespace CardGames
             return cards;
         }
 
-        public override string ToString()
-        {
-            return Show();
-        }
+        public override string ToString() => Display();
 
-        public string Show()
+        public string Display()
         {
             StringBuilder stringBuilder = new();
             stringBuilder.AppendLine($"{Name}:");
 
             foreach (Card card in Cards)
-            {
                 stringBuilder.AppendLine(card.Name);
-            }
 
             string output = stringBuilder.ToString();
             return output;
@@ -80,7 +56,7 @@ namespace CardGames
 
         public void Shuffle()
         {
-            throw new System.NotImplementedException();
+            RandomShuffle(Cards);
         }
 
         public Card Deal()

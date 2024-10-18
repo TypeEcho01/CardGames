@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using static CardGames.Functions;
+using static Library.Methods;
 
 namespace CardGames
 {
@@ -13,7 +13,7 @@ namespace CardGames
         public string Suit;
         public string Name;
 
-        public Card(int rank, string suit) 
+        public Card(int rank, string suit)
         { 
             Rank = rank;
             Suit = suit;
@@ -32,9 +32,6 @@ namespace CardGames
             };
         }
 
-        public override string ToString()
-        {
-            return Name;
-        }
+        public override string ToString() => Name;
     }
 }
