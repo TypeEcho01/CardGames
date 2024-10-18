@@ -47,28 +47,31 @@ namespace CardGames
 
             while (true)
             {
-                Game = null;
                 ClearScreen();
                 PrintInfo();
                 Print("1. Same or Different");
                 Print("2. Higher or Lower");
-                Print("3. Highest Match");
+                Print("3. Highest Total");
+                Print("4. Highest Match");
                 Print();
                 Print("9. Settings");
                 Print("0. Exit Game");
                 Print();
 
-                int choice = GetChoice(1, 2, 3, 9, 0);
+                int choice = GetChoice(1, 2, 3, 4, 9, 0);
                 switch (choice)
                 {
                     case 1:
-                        Game = new SameOrDifferent(PlayerName);
+                        PlayGame(new SameOrDifferent());
                         break;
                     case 2:
-                        Game = new HigherOrLower(PlayerName);
+                        PlayGame(new HigherOrLower());
                         break;
                     case 3:
-                        Game = new HighestMatch(PlayerName);
+                        PlayGame(new HighestTotal());
+                        break;
+                    case 4:
+                        PlayGame(new HighestMatch());
                         break;
                     case 9:
                         LoadSettings();
@@ -76,13 +79,13 @@ namespace CardGames
                     case 0:
                         return;
                 }
-
-                if (Game is not null)
-                {
-                    ClearScreen();
-                    Game.Play();
-                }
             }
+        }
+
+        private static void PlayGame(CardGame cardGame)
+        {
+            ClearScreen();
+            cardGame.Play();
         }
 
         private void LoadSettings()
@@ -146,7 +149,7 @@ namespace CardGames
             Print(_separator);
         }
 
-        private int GetChoice(params int[] validChoices)
+        private static int GetChoice(params int[] validChoices)
         {
             if (validChoices.Length == 0)
                 throw new ArgumentException("Number of valid choices cannot be 0");
@@ -168,12 +171,6 @@ namespace CardGames
 
                 Print("Invalid answer. Please try again.");
             }
-        }
-
-        private int GetChoice(string prompt, int[] validChoices)
-        {
-            Print(prompt);
-            return GetChoice(validChoices);
         }
     }
 }

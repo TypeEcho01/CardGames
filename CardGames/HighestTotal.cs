@@ -10,27 +10,25 @@ using static Library.Methods;
 
 namespace CardGames
 {
-    public class HighestMatch : CardGame
+    public class HighestTotal : CardGame
     {
         public int Round = 0;
-        public int MaxRoundCount = 10;
+        public int MaxRoundCount = 5;
         public Person? Player = null;
         public Person? Dealer = null;
         public Deck? Deck = null;
 
-        public static readonly string[] Suits = ["Spades", "Clubs", "Diamonds", "Hearts"];
-
         private readonly Random _random = new();
 
-        public HighestMatch(string playerName = "Player") : base(
-            "Highest Match",
+        public HighestTotal(string playerName = "Player") : base(
+            "Highest Total",
             playerName,
             "You and the Dealer have a hand of 4 cards each.",
             "You can see your hand, but not the Dealer's.",
-            "The person with the highest value of the cards in the suit with the most value wins.",
+            "The person with the highest value of all their cards wins.",
             "Each round, you can choose to replace one of your cards or not.",
-            "If you choose to replace a card, the dealer may also choose to replace a card.",
-            "The game ends if you choose to not replace a card, or after all rounds are over.",
+            "The dealer may also choose to replace a card or not.",
+            "The game ends after all rounds are over.",
             "An Ace is worth 1, a Jack is worth 11, a Queen is worth 12, and a King is worth 13."
         )
         { }
@@ -58,9 +56,7 @@ namespace CardGames
                 Card card = person.Hand[i - 1];
                 Print($"    {i}) {card}");
             }
-            int[] handValue = GetHandValue(person);
-
-            Print("    Highest Match:", Suits[handValue[0]], "|", "Value:", handValue[1]);
+            Print("    Value:", GetHandValue(person));
         }
 
         public override void Play()
@@ -69,7 +65,7 @@ namespace CardGames
             Round = 0;
             Deck = new Deck(
                 "Dealer's Deck",
-                Suits,
+                ["Spades", "Clubs", "Diamonds", "Hearts"],
                 13
             );
 
@@ -86,7 +82,7 @@ namespace CardGames
                 int playerChoice = GetPlayerChoice();
                 string oldCardName = string.Empty;
                 string newCardName = string.Empty;
-                int[] oldPlayerHandValue = GetHandValue(Player);
+                int oldPlayerHandValue = GetHandValue(Player);
 
                 if (playerChoice != -1)
                 {
@@ -97,39 +93,44 @@ namespace CardGames
 
                 PrintHUD();
 
-                if (playerChoice == -1)  // End game
+                // Player does not replace a card
+                if (playerChoice == -1)  
                 {
                     Dealer.Speak("Okay.");
                     Print("You have chosen to not replace a card.");
                     Print();
-                    Print("Your hand highest match of", Suits[oldPlayerHandValue[0]], "and value of", oldPlayerHandValue[1], "is unchanged.");
-                    break;
+                    Print("Your hand value of", oldPlayerHandValue, "is unchanged.");
                 }
-
-                Dealer.Speak("Here is your new card.");
-                Print($"You have chosen to replace your {oldCardName}. You drew a {newCardName}.");
-                Print();
-                int[] newPlayerHandValue = GetHandValue(Player);
-
-                string descriptor;
-                if (newPlayerHandValue[1] > oldPlayerHandValue[1])
-                    descriptor = "is higher than";
-                else if (newPlayerHandValue[1] < oldPlayerHandValue[1])
-                    descriptor = "is lower than";
+                // Player replaces a card
                 else
-                    descriptor = "is the same as";
+                {
+                    Dealer.Speak("Here is your new card.");
+                    Print($"You have chosen to replace your {oldCardName}. You drew a {newCardName}.");
+                    Print();
+                    int newPlayerHandValue = GetHandValue(Player);
+                    string descriptor;
 
-                Print("Your new hand value of", newPlayerHandValue[1], descriptor, $"your previous hand value of {oldPlayerHandValue[1]}.");
+                    if (newPlayerHandValue > oldPlayerHandValue)
+                        descriptor = "is higher than";
+                    else if (newPlayerHandValue < oldPlayerHandValue)
+                        descriptor = "is lower than";
+                    else
+                        descriptor = "is the same as";
 
+                    Print("Your new hand value of", newPlayerHandValue, descriptor, $"your previous hand value of {oldPlayerHandValue}.");
+                }
+                
                 Print();
 
-                // Dealer Choice
                 int dealerChoice = GetDealerChoice();
+
+                // Dealer does not replace a card
                 if (dealerChoice == -1)
                 {
                     Dealer.Speak("I won't replace any of my cards.");
                     Print("The dealer has chosen to not replace a card.");
                 }
+                // Dealer replaces a carda
                 else
                 {
                     Dealer.Speak("I'll replace this card.");
@@ -150,8 +151,8 @@ namespace CardGames
 
         private void PrintGameConclusion()
         {
-            int playerScore = GetHandValue(Player)[1];
-            int dealerScore = GetHandValue(Dealer)[1];
+            int playerScore = GetHandValue(Player);
+            int dealerScore = GetHandValue(Dealer);
 
             ClearScreen();
             PrintInfo();
@@ -205,43 +206,13 @@ namespace CardGames
 
         private static int GetCardValue(Card card) => card.Rank;  // For this game, the rank is equal to the value, so ace == 1, jack == 11, etc.
 
-        private static int[] GetHandValue(Person person)
+        private static int GetHandValue(Person person)
         {
-            int[] values = [0, 0, 0, 0];
-
+            int sum = 0;
             foreach (Card card in person.Hand)
-            {
-                int value = GetCardValue(card);
-                string suit = card.Suit;
+                sum += GetCardValue(card);
 
-                int index = -1;
-                if (suit == Suits[0])
-                    index = 0;
-                else if (suit == Suits[1])
-                    index = 1;
-                else if (suit == Suits[2])
-                    index = 2;
-                else if (suit == Suits[3])
-                    index = 3;
-                else
-                    throw new Exception($"Unknown Card suit \"{suit}\"");
-
-                values[index] += value;
-            }
-
-            int highestValue = -1;
-            int highestIndex = -1;
-            for (int i = 0; i < values.Length; i++)
-            {
-                if (values[i] < highestValue)
-                    continue;
-
-                highestValue = values[i];
-                highestIndex = i;
-            }
-
-            // Returns the index to tell what suit holds the highest value
-            return [highestIndex, highestValue];
+            return sum;
         }
 
         private Person CreatePerson(string name, int numberOfCards)
@@ -260,9 +231,9 @@ namespace CardGames
 
         private int GetPlayerChoice()
         {
-            Dealer.Speak("Would you like to replace one of your cards with a new card, or are you ready to end the game?");
+            Dealer.Speak("Would you like to replace one of your cards with a new card?");
             Print("Enter the corresponding number to replace that card.");
-            Print("Enter \"0\" to end the game.");
+            Print("Enter \"0\" to not replace a card.");
             while (true)
             {
                 string input = Input(">>> ");
@@ -293,8 +264,6 @@ namespace CardGames
             }
 
             // Continue if the dealer does not panic
-            int highestMatchIndex = GetHandValue(Dealer)[0];
-
             int highestPossibleValue = Deck.SuitSize;
             int minValueRank = highestPossibleValue;
             int minValueIndex = -1;
@@ -302,12 +271,7 @@ namespace CardGames
             for (int i = 0; i < Dealer.Hand.Count; i++)
             {
                 Card card = Dealer.Hand[i];
-
-                // Skip if the card is not part of the suit with the highest value
-                if (card.Suit != Suits[highestMatchIndex])
-                    continue;
-
-                if (GetCardValue(card) > minValueRank)
+                if (GetCardValue(card) < minValueRank)
                     continue;
 
                 minValueRank = card.Rank;
