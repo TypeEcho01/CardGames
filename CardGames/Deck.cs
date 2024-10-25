@@ -48,7 +48,7 @@ namespace CardGames
             stringBuilder.AppendLine($"{Name}:");
 
             foreach (Card card in Cards)
-                stringBuilder.AppendLine(card.Name);
+                stringBuilder.AppendLine(card.ToString());
 
             string output = stringBuilder.ToString();
             return output;
@@ -56,6 +56,7 @@ namespace CardGames
 
         public void Shuffle()
         {
+            // Random number and shuffling code from PROG 201 class demo
             RandomShuffle(Cards);
         }
 
